@@ -1,0 +1,28 @@
+version: "2"
+services: 
+    speedtest-app:
+      image: speedtest-app:latest 
+      links:
+         - speedtest-db
+      volumes:
+         - /etc/localtime:/etc/localtime:ro
+      environment:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_HOST: ${MYSQL_HOST}
+        MYSQL_PORT: ${MYSQL_PORT}
+    speedtest-db:
+      image: mariadb:10.3
+      container_name: speedtest-db
+      ports:
+        - "3306:3306"
+      environment:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      volumes:
+        - ./db:/docker-entrypoint-initdb.d/:ro 
+        - /etc/localtime:/etc/localtime:ro

@@ -1,0 +1,1 @@
+*/2 * * * * /usr/local/bin/app /usr/src/app/speedtest-go --json &> /var/log/script.log
