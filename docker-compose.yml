@@ -1,7 +1,7 @@
 version: "2"
 services: 
     speedtest-app:
-      image: speedtest-app:latest 
+      image: rk90229/speedtest-goapp:v1
       links:
          - speedtest-db
       volumes:
