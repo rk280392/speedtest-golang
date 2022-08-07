@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+
+<head>
+
+</head>
+
+<body>
+	<include src="header.html"></include>
+	<div class="row">
+		<p>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tableContainer"
+				aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;">
+				Speedtest Report
+			</button>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#chartContainer"
+				aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;">
+				Speedtest Graph
+			</button>
+			<button class="btn btn-primary" type="button" onclick="exportTableToCSV('ISPSpeedReport.csv')">Export ISP
+				Report To CSV File</button>
+			<button class="btn btn-primary" type="button" id="exportChart">Export Chart</button>
+
+		</p>
+	</div>
+	<div class="row card card-body collapse" id="tableContainer">
+		<div class="col-sm-12">
+			<table class="table table-striped">
+				<tr>
+					<th>Id</th>
+					<th>Timestamp</th>
+					<th>Public IP</th>
+					<th>Peer Server</th>
+					<th>Download Speed(Mbps)</th>
+					<th>Upload Speed(Mbps)</th>
+				</tr>
+				<tr>
+					{{ range . }}
+					<th>{{ . }}</th>
+					{{ end }}
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="row card card-body collapse" id="chartContainer">
+		<div class="col-sm-12">
+			<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+		</div>
+	</div>
+	<include src="footer.html"></include>
+</body>

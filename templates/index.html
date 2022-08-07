@@ -1,0 +1,115 @@
+{% include "header.html" %}
+<link href="/static/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+{% block body %}
+<script ctype="text/javascript" src="/static/js/canvasjs.min.js"></script>
+<script ctype="text/javascript" src="/static/js/exportToCSV.js"></script>
+
+<!DOCTYPE HTML>
+
+<head>
+	<script type="text/javascript">
+		window.onload = function () {
+
+			var dataPoints1 = [];
+			var dataPoints2 = [];
+
+			var chart = new CanvasJS.Chart("chartContainer", {
+				zoomEnabled: true,
+				title: {
+					text: "Download and Upload speeds"
+				},
+				width: 1100,
+				axisX: {
+					title: "chart updates every 10 minutes"
+				},
+				axisY: {
+					prefix: "Mbps ",
+					includeZero: true
+				},
+				toolTip: {
+					shared: true
+				},
+				legend: {
+					cursor: "pointer",
+					verticalAlign: "top",
+					fontSize: 22,
+					fontColor: "dimGrey",
+					itemclick: toggleDataSeries
+				},
+				data: [{
+					type: "line",
+					xValueType: "dateTime",
+					yValueFormatString: "####Mbps",
+					xValueFormatString: "hh:mm:ss TT",
+					showInLegend: true,
+					name: "Download",
+					dataPoints: dataPoints1
+				},
+				{
+					type: "line",
+					xValueType: "dateTime",
+					yValueFormatString: "####Mbps",
+					showInLegend: true,
+					name: "Upload",
+					dataPoints: dataPoints2
+				}]
+			});
+
+			function toggleDataSeries(e) {
+				if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+					e.dataSeries.visible = false;
+				}
+				else {
+					e.dataSeries.visible = true;
+				}
+				chart.render();
+
+			}
+
+		}
+	</script>
+</head>
+
+<body>
+	<div class="row">
+		<p>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tableContainer"
+				aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;">
+				Speedtest Report
+			</button>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#chartContainer"
+				aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;">
+				Speedtest Graph
+			</button>
+			<button class="btn btn-primary" type="button" onclick="exportTableToCSV('ISPSpeedReport.csv')">Export ISP
+				Report To CSV File</button>
+			<button class="btn btn-primary" type="button" id="exportChart">Export Chart</button>
+
+		</p>
+	</div>
+	<div class="row card card-body collapse" id="tableContainer">
+		<div class="col-sm-12">
+			<table class="table table-striped">
+
+				<tr>
+					<th>Id</th>
+					<th>Timestamp</th>
+					<th>Public IP</th>
+					<th>Peer Server</th>
+					<th>Download Speed(Mbps)</th>
+					<th>Upload Speed(Mbps)</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="row card card-body collapse" id="chartContainer">
+		<div class="col-sm-12">
+			<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+		</div>
+	</div>
+</body>
+<!-- Modal -->
+{% endblock %}
+<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>

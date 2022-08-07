@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-speedtest-app
+spec:
+  replicas: 1
+  selector:
+    matchLables:
+      app: speedtest-app
+  template:
+    metadata:
+      labels:
+        app: speedtest-app
+spec:
+  containers:
+    - name: speedtest-app
+      image: rk90229/speedtest-goapp:v1
+      ports:
+        - containerPort: 30002
+      env:
+        - name: MYSQL_DATABASE
+          value: ${MYSQL_DATABASE}
+        - name: MYSQL_USER
+          value: ${MYSQL_USER}
+        - name: MYSQL_PASSWORD
+          value: ${MYSQL_PASSWORD}
+        - name: MYSQL_HOST
+          value: ${MYSQL_HOST}
+        - name: MYSQL_PORT
+          value: ${MYSQL_PORT}
+
+    - name: speedtest-db
+      image: mariadb:10.3 
+      ports:
+        containerPort: 3306
+      env:
+        - name: MYSQL_DATABASE
+          value: ${MYSQL_DATABASE}
+        - name: MYSQL_USER
+          value: ${MYSQL_USER}
+        - name: MYSQL_PASSWORD
+          value: ${MYSQL_PASSWORD}
+        - name: MYSQL_ROOT_PASSWORD
+          value: ${MYSQL_ROOT_PASSWORD}
