@@ -1,7 +1,8 @@
 version: "2"
 services: 
     speedtest-app:
-      image: rk90229/speedtest-goapp:v1
+      build:
+        context: speedtest-go-image/ 
       links:
          - speedtest-db
       volumes:
@@ -11,6 +12,20 @@ services:
         MYSQL_USER: ${MYSQL_USER}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_HOST: ${MYSQL_HOST}
+        MYSQL_PORT: ${MYSQL_PORT}
+    speedtest-webui:
+      build:
+        context: webframe
+      links:
+         - speedtest-db
+         - speedtest-app
+      ports:
+        - "8010:8010"
+      environment:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         MYSQL_HOST: ${MYSQL_HOST}
         MYSQL_PORT: ${MYSQL_PORT}
     speedtest-db:

@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html/template"
+	//"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -16,7 +16,7 @@ import (
 type App struct {
 	Router *mux.Router
 	DB     *gorm.DB
-	tmpl   *template.Template
+	//tmpl   *template.Template
 }
 
 type speedResult struct {
@@ -51,7 +51,6 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 func (a *App) Initialize(user, password, dbname, host string) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, dbname)
-	fmt.Println(connectionString)
 	var err error
 	a.DB, err = gorm.Open("mysql", connectionString)
 	if err != nil {
@@ -61,8 +60,7 @@ func (a *App) Initialize(user, password, dbname, host string) {
 }
 
 func (a *App) Run(addr string) {
-
-	log.Fatal(http.ListenAndServe("localhost:8010", a.Router))
+	log.Fatal(http.ListenAndServe(":8010", a.Router))
 }
 
 func getResults(db *gorm.DB) []speedResult {
@@ -79,15 +77,17 @@ func (a *App) getResults(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, results)
 }
 
-func (a *App) indexFile(w http.ResponseWriter, r *http.Request) {
-	results := getResults(a.DB)
-	fmt.Println(results[0])
-	fmt.Printf("t1 : %T\n", results[0])
-	a.tmpl.ExecuteTemplate(w, "index.html", results)
-}
+
+// TODO
+
+//func (a *App) indexFile(w http.ResponseWriter, r *http.Request) {
+//	results := getResults(a.DB)
+//	fmt.Println(results[0])
+//	fmt.Printf("t1 : %T\n", results[0])
+//	a.tmpl.ExecuteTemplate(w, "index.html", results)
+//}
 
 //func (a *App) InitializeRoutes() {
-
 //}
 
 func main() {
@@ -99,15 +99,15 @@ func main() {
 		os.Getenv("MYSQL_HOST"),
 	)
 
-	a.tmpl = template.Must(template.ParseGlob("templates/*.html"))
 	a.Router = mux.NewRouter()
-	a.Router.HandleFunc("/", a.indexFile).Methods("GET")
-	a.Router.HandleFunc("/results", a.getResults).Methods("GET")
+	a.Router.HandleFunc("/", a.getResults).Methods("GET")
+   a.Run(":8010")
+
+   // TODO create good index file and show static content
+	// a.tmpl = template.Must(template.ParseGlob("templates/*.html"))
 	//a.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./templates/")))
-
-	fs := http.FileServer(http.Dir("./static/"))
-	a.Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
-	http.Handle("/", a.Router)
-	a.Run("8010")
-
+	// a.Router.HandleFunc("/", a.indexFile).Methods("GET")
+//	fs := http.FileServer(http.Dir("./static/"))
+//	a.Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+//	http.Handle("/", a.Router)
 }
