@@ -9,7 +9,9 @@
    Deploys three containers:
 
    1 - MySQL as DB
+
    2 - Golang app which runs the cron and inserts results into the db.
+
    3 - WebUI which exposes the matrics from the DB and runs on port 8010.
 
 # Steps:
