@@ -60,7 +60,7 @@ func (a *App) Initialize(user, password, dbname, host string) {
 }
 
 func (a *App) Run(addr string) {
-	log.Fatal(http.ListenAndServe(":8010", a.Router))
+   log.Fatal(http.ListenAndServe(":" + addr, a.Router))
 }
 
 func getResults(db *gorm.DB) []speedResult {
@@ -98,10 +98,10 @@ func main() {
 		os.Getenv("MYSQL_DATABASE"),
 		os.Getenv("MYSQL_HOST"),
 	)
-
+   
 	a.Router = mux.NewRouter()
 	a.Router.HandleFunc("/", a.getResults).Methods("GET")
-   a.Run(":8010")
+   a.Run(os.Getenv("HOST_PORT"))
 
    // TODO create good index file and show static content
 	// a.tmpl = template.Must(template.ParseGlob("templates/*.html"))
