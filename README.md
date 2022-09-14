@@ -25,3 +25,8 @@ Make sure docker and docker-compose is installed on your machine.
      docker-compose up -d --build
 
 3 - Access the results in json through rest api by hitting endpoint 127.0.0.1:8010
+
+# Screenshot
+
+![Screenshot](https://user-images.githubusercontent.com/43488291/190160689-f415cc90-d20c-490e-b677-a557989f4884.png)
+
