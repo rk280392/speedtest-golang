@@ -72,7 +72,6 @@ func dbConnect(timestamp string, download float64, upload float64, latency int, 
 	host := os.Getenv("MYSQL_HOST")
 	port := os.Getenv("MYSQL_PORT")
 	dsn := user + ":" + pswd + "@tcp(" + host + ":" + port + ")/" + database
-	fmt.Println(dsn)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
