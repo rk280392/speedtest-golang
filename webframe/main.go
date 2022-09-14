@@ -65,6 +65,7 @@ func (a *App) Run(addr string) {
 
 func getResults(db *gorm.DB) []speedResult {
 	var speedtest []speedResult
+
 	if err := db.Find(&speedtest).Error; err != nil {
 		log.Fatal(err)
 	}
@@ -74,6 +75,10 @@ func getResults(db *gorm.DB) []speedResult {
 
 func (a *App) getResults(w http.ResponseWriter, r *http.Request) {
 	results := getResults(a.DB)
+   if len(results) < 1 {
+      fmt.Println("No results found")
+   }
+
 	respondWithJSON(w, http.StatusOK, results)
 }
 
